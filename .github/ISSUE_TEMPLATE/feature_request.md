@@ -8,9 +8,9 @@ assignees: ''
 ---
 
 **Problem**
-A description of what the problem is.
+A description of what is the problem that can be fixed with the feature you propose.
 
-**Solution**
+**Feature**
 A description of the feature you propose.
 
 **Examples**
