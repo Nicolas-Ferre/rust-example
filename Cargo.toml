@@ -1,0 +1,13 @@
+[package]
+name = "rust_lib_example"
+version = "0.1.0"
+authors = ["Nicolas Ferré <nicolas.ferre.public@gmail.com>"]
+edition = "2018"
+description = "Rust project example"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Nicolas-Ferre/rust-example"
+readme = "./README.md"
+keywords = ["rust", "example", "project", "lib"]
+categories = ["development-tools"]
+
+[dependencies]
