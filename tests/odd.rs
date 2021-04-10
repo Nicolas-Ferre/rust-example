@@ -1,6 +1,6 @@
 use rust_lib_example::odd_values;
 
-const VALUES: [usize; 5] = [1, 2, 3, 4, 5];
+const VALUES: [i32; 5] = [1, 2, 3, 4, 5];
 
 #[test]
 fn filter_odd_values() {

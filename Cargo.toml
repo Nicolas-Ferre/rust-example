@@ -11,3 +11,4 @@ keywords = ["rust", "example", "project", "lib"]
 categories = ["development-tools"]
 
 [dependencies]
+is-odd = "1.0"
