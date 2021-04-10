@@ -17,7 +17,7 @@ env:
 
 jobs:
 
-  Test:
+  test:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -33,9 +33,9 @@ jobs:
       - name: Test
         run: cargo test
 
-  Check coverage and mutations:
+  check-coverage-mutations:
     runs-on: ubuntu-18.04
-    needs: Test
+    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -61,9 +61,9 @@ jobs:
       - name: Run mutation tests
         run: bash .github/workflows/scripts/check_mutations.sh
 
-  Lint:
+  lint:
     runs-on: ubuntu-18.04
-    needs: Check coverage and mutations
+    needs: check-coverage-mutations
     steps:
       - name: Checkout
         uses: actions/checkout@v2
