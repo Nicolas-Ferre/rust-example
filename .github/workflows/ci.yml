@@ -3,9 +3,11 @@ name: CI
 on:
   push:
     branches:
+      - main
       - develop
   pull_request:
     branches:
+      - main
       - develop
 
 env:
@@ -51,13 +53,16 @@ jobs:
       - name: Install mutagen
         run: bash .github/workflows/scripts/install_mutagen.sh
       - name: Run coverage
-        run: bash .github/workflows/scripts/check_coverage.sh
-      - uses: actions/upload-artifact@v2
+        run: bash .github/workflows/scripts/run_coverage.sh
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
         with:
           name: coverage
           path: coverage
           if-no-files-found: error
           retention-days: 1
+      - name: Check coverage threshold
+        run: bash .github/workflows/scripts/check_coverage.sh
       - name: Run mutation tests
         run: bash .github/workflows/scripts/check_mutations.sh
 

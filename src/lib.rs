@@ -1,5 +1,8 @@
+//! Example of Rust library.
+
 use is_odd::IsOdd;
 
+/// Filter odd numbers.
 pub fn odd_values(values: &[i32]) -> Vec<i32> {
     if values.is_empty() {
         Vec::new()

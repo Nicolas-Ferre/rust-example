@@ -1,4 +1,5 @@
-#![allow(clippy::print_stdout)]
+//! Example that uses the library.
+#![allow(clippy::print_stdout, clippy::use_debug)]
 
 use rust_lib_example::odd_values;
 
