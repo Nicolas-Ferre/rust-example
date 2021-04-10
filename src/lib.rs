@@ -1,7 +1,12 @@
 use is_odd::IsOdd;
 
 pub fn odd_values(values: &[i32]) -> Vec<i32> {
-    values.iter().copied().filter(IsOdd::is_odd).collect()
+    values
+        .iter()
+        .copied()
+        .filter(|&v| v % 2 == 1)
+        .filter(IsOdd::is_odd)
+        .collect()
 }
 
 #[cfg(test)]

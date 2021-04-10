@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+env:
+  CARGO_TERM_COLOR: always
+  KCOV_VERSION: 38
+  MUTAGEN_COMMIT: f8249256c40769c916b5b00bd284f204d5540588
+  KCOV_EXCLUDED_LINES: "struct ,#[derive(, }, );,match "
+  KCOV_EXCLUDED_REGION: coverage=off:coverage=on
+  KCOV_THRESHOLD: 100.0
+  MUTAGEN_THRESHOLD: 100.0
+  CRATE_PATHS: . # package names separated by ";" in publish order if the repository is a Cargo workspace, else "."
+
+jobs:
+
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.51.0
+          profile: minimal
+          override: true
+      - name: Install kcov
+        run: bash .github/workflows/scripts/install_kcov.sh
+      - name: Install cargo-kcov
+        run: cargo install cargo-kcov
+      - name: Build
+        run: cargo build --all-targets
+      - name: Test
+        run: cargo test
+      - name: Run coverage
+        run: echo $PWD && ls && bash .github/workflows/scripts/check_coverage.sh
+      # TODO: upload coverage report: https://github.com/actions/upload-artifact
+
+  test-mutations:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly-2021-03-25
+          profile: minimal
+          override: true
+      - name: Install mutagen
+        run: bash .github/workflows/scripts/install_mutagen.sh
+      - name: Run mutation tests
+        run: bash .github/workflows/scripts/check_mutations.sh
+
+  lint:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.51.0
+          override: true
+      - name: Install other dependencies
+        run: apt-get install moreutils dos2unix
+      - name: Check encoding
+        run: isutf8 **/*
+      - name: Check line endings
+        run: bash .github/workflows/scripts/check_line_endings.sh
+      - name: Check TODOs
+        run: bash .github/workflows/scripts/check_todos.sh
+      - name: Run clippy
+        run: cargo clippy --all-targets -- -D warnings
+      - name: Run rustfmt
+        run: cargo fmt -- --check
+      - name: Run cargo-deny
+        uses: EmbarkStudios/cargo-deny-action@v1
+        with:
+          command: check
