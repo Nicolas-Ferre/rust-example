@@ -1,17 +1,30 @@
 use is_odd::IsOdd;
 
 pub fn odd_values(values: &[i32]) -> Vec<i32> {
-    values
-        .iter()
-        .copied()
-        .filter(|&v| v % 2 == 1)
-        .filter(IsOdd::is_odd)
-        .collect()
+    if values.is_empty() {
+        Vec::new()
+    } else {
+        values
+            .iter()
+            .copied()
+            .filter(|&v| v % 2 == 1)
+            .filter(IsOdd::is_odd)
+            .collect()
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn no_value() {
+        let values = [];
+
+        let odd_values = odd_values(&values);
+
+        assert_eq!(odd_values, values);
+    }
 
     #[test]
     fn only_odd_values() {

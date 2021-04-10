@@ -40,6 +40,7 @@ for crate_path in $CRATE_PATHS; do
     echo "Dependency added."
 
     log_path=log.txt
+    cargo clean
     cargo test --no-run --verbose
     cargo-mutagen | tee $log_path
     killed=$(grep -o '([^"]*%) mutants killed' $log_path | grep -o '[0-9.]*')

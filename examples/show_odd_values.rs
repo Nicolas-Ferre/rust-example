@@ -1,3 +1,5 @@
+#![allow(clippy::print_stdout)]
+
 use rust_lib_example::odd_values;
 
 fn main() {

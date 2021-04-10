@@ -1,11 +1,12 @@
 #!/bin/bash
 set -xeu
 
-cargo kcov --all --lib --verbose -- --exclude-pattern=/.cargo,/lib/ --exclude-line "$KCOV_EXCLUDED_LINES" --exclude-region "$KCOV_EXCLUDED_REGION" --verify --clean
-coverage=$(grep -o '\"covered\":\"[^"]*\"' target/cov/index.js | grep -o '[0-9.]*')
-failure=$(awk 'BEGIN{ print '"$coverage"'<'"$KCOV_THRESHOLD"' }')
+RUSTFLAGS="-Zinstrument-coverage" cargo test --lib
+grcov . --binary-path ./target/debug/ -s . -t html --branch --ignore-not-existing -o ./coverage/ --excl-start "#\[cfg\(test\)\]" --keep-only **/src/**/*
+coverage=$(grep -m 1 '<abbr title' coverage/index.html | grep -o "[0-9.]*" | tail -1)
+failure=$(awk 'BEGIN{ print '"$coverage"'<'"$COV_THRESHOLD"' }')
 if [ "$failure" -eq "1" ]; then
-    echo "Coverage has failed with $coverage% instead of at least $KCOV_THRESHOLD%."
+    echo "Coverage has failed with $coverage% instead of at least $COV_THRESHOLD%."
     exit 1
 else
     echo "Coverage has successfully passed with $coverage%."
