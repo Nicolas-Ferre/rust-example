@@ -23,7 +23,8 @@ jobs:
   test:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -45,7 +46,8 @@ jobs:
   test-mutations:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -60,14 +62,15 @@ jobs:
   lint:
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           toolchain: 1.51.0
           override: true
       - name: Install other dependencies
-        run: apt-get install moreutils dos2unix
+        run: sudo apt-get install moreutils dos2unix
       - name: Check encoding
         run: isutf8 **/*
       - name: Check line endings
