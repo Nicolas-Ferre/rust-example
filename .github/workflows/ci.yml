@@ -68,6 +68,8 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: 1.51.0
+          profile: minimal
+          components: rustfmt, clippy
           override: true
       - name: Install other dependencies
         run: sudo apt-get install moreutils dos2unix
