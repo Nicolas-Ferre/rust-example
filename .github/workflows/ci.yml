@@ -12,10 +12,12 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  RUST_VERSION_STABLE: 1.51.0
+  RUST_VERSION_NIGHTLY: nightly-2021-03-25
   MUTAGEN_COMMIT: f8249256c40769c916b5b00bd284f204d5540588
   COV_THRESHOLD: 100.0
   MUTAGEN_THRESHOLD: 100.0
-  CRATE_PATHS: . # package names separated by ";" in publish order if the repository is a Cargo workspace, else "."
+  CRATE_PATHS: .
 
 jobs:
 
@@ -27,7 +29,7 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.51.0
+          toolchain: ${{ env.RUST_VERSION_STABLE }}
           profile: minimal
           override: true
       - name: Build
@@ -44,7 +46,7 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly-2021-03-25
+          toolchain: ${{ env.RUST_VERSION_NIGHTLY }}
           profile: minimal
           components: llvm-tools-preview
           override: true
@@ -75,23 +77,21 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: 1.51.0
+          toolchain: ${{ env.RUST_VERSION_STABLE }}
           profile: minimal
           components: rustfmt, clippy
           override: true
       - name: Install other dependencies
         run: sudo apt-get install moreutils dos2unix
-      - name: Check encoding
-        run: isutf8 **/*
-      - name: Check line endings
-        run: bash .github/workflows/scripts/check_line_endings.sh
-      - name: Check TODOs
-        run: bash .github/workflows/scripts/check_todos.sh
       - name: Run clippy
         run: cargo clippy --all-targets -- -D warnings $(cat .lints | cut -f1 -d"#" | tr '\n' ' ')
       - name: Run rustfmt
         run: cargo fmt -- --check
       - name: Run cargo-deny
         uses: EmbarkStudios/cargo-deny-action@v1
-        with:
-          command: check
+      - name: Check encoding
+        run: isutf8 **/*
+      - name: Check line endings
+        run: bash .github/workflows/scripts/check_line_endings.sh
+      - name: Check TODOs
+        run: bash .github/workflows/scripts/check_todos.sh
