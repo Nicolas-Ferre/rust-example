@@ -15,6 +15,7 @@ This repository contains an example of Rust project structure.
 Most of the components can be reusable in your own projects:
 - Project configuration
 - CI workflow to build, lint, test, check test coverage and run mutation tests
+- CD workflow to test on all platforms and publish on [crates.io](https://crates.io)
 
 ## Github Actions workflows
 
@@ -40,6 +41,15 @@ The `CI` workflow is triggered for any commit or pull request on the `develop` b
 
 This workflow is only run on Ubuntu virtual environment.
 
+The `CD` workflow is triggered by a push in the `main` branch and runs the following jobs:
+- Test on Ubuntu
+- Test on Windows
+- Test on MacOS
+- Make a publication dry run on [crates.io](https://crates.io)
+- Publish on [crates.io](https://crates.io)
+
+The `CD` workflow requires a secret named `CRATES_IO_TOKEN` to be able to publish the crate(s).
+
 ### Settings
 
 Settings of the `CI` workflow can be modified in the file `.github/workflows/ci.yml`, in the `env` section:
@@ -48,6 +58,10 @@ Settings of the `CI` workflow can be modified in the file `.github/workflows/ci.
 - `MUTAGEN_COMMIT`: commit of the mutagen version to install ([from mutagen repository](https://github.com/llogiq/mutagen))
 - `COV_THRESHOLD`: minimum threshold the coverage must reached to succeed the job
 - `MUTAGEN_THRESHOLD`: minimum threshold the mutation tests must reached to succeed the job
+- `CRATE_PATHS`: package names separated by `;` in publication order if the repository is a Cargo workspace, else `.`
+
+Settings of the `CD` workflow can be modified in the file `.github/workflows/cd.yml`, in the `env` section:
+- `RUST_VERSION_STABLE`: version of the stable Rust compiler to use
 - `CRATE_PATHS`: package names separated by `;` in publication order if the repository is a Cargo workspace, else `.`
 
 ### Export
