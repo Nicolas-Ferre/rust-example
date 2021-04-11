@@ -63,6 +63,7 @@ Settings of the `CI` workflow can be modified in the file `.github/workflows/ci.
 Settings of the `CD` workflow can be modified in the file `.github/workflows/cd.yml`, in the `env` section:
 - `RUST_VERSION_STABLE`: version of the stable Rust compiler to use
 - `CRATE_PATHS`: package names separated by `;` in publication order if the repository is a Cargo workspace, else `.`
+- `AUTHORIZED_ACTORS`: list GitHub users that are authorized to perform a publication
 
 ### Export
 
