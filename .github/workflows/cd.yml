@@ -81,7 +81,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-18.04
-    needs: test-macos
+    needs: check-publication
     if: ${{ contains(env.AUTHORIZED_ACTORS, github.actor) }}
     steps:
       - name: Checkout
