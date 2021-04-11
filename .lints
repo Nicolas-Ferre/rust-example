@@ -32,7 +32,6 @@
 -W clippy::wildcard_enum_match_arm
 -W clippy::wrong_pub_self_convention
 -A clippy::filter_map # generally less clear
--A clippy::find_map # generally less clear
 -A clippy::missing_const_for_fn # not necessary each time it's possible
 -A clippy::module_name_repetitions # structure names are rarely used with module names
 -A clippy::multiple_crate_versions # cannot be easily fixed

@@ -49,7 +49,7 @@ jobs:
           components: llvm-tools-preview
           override: true
       - name: Install grcov
-        run: cargo install grcov
+        run: cargo install grcov --debug
       - name: Install mutagen
         run: bash .github/workflows/scripts/install_mutagen.sh
       - name: Run coverage
