@@ -28,6 +28,7 @@ The `CI` workflow is triggered for any commit or pull request on the `develop` b
 - Run test coverage and mutation tests
     - Run [source-based coverage](https://marco-c.github.io/2020/11/24/rust-source-based-code-coverage.html) with [grcov](https://github.com/mozilla/grcov)
     - Upload HTML coverage report in workflow artifacts
+    - Upload HTML coverage report on Codecov
     - Fail if the coverage threshold is not reached
     - Run mutation tests with [mutagen](https://github.com/llogiq/mutagen) (note that the job automatically adds `#[mutate]` annotations)
     - Fail if the mutation threshold is not reached
@@ -42,16 +43,15 @@ The `CI` workflow is triggered for any commit or pull request on the `develop` b
 This workflow is only run on Ubuntu virtual environment.
 
 The `CD` workflow is triggered by a push in the `main` branch and runs the following jobs:
+- Check release name from `CHANGELOG.md` file
 - Test on Ubuntu
 - Test on Windows
 - Test on MacOS
 - Make a publication dry run on [crates.io](https://crates.io)
 - Publish on [crates.io](https://crates.io)
+- Create tag and Github release using first entry in `CHANGELOG.md` file
 
 ### Secrets
-
-The `CI` workflow can send coverage to [Codecov](https://about.codecov.io/) if the secret `CODECOV_TOKEN` is set.<br>
-This secret must be stored in a [repository environment](https://docs.github.com/en/actions/reference/environments) called `Coverage`.
 
 The `CD` workflow requires a secret named `CRATES_IO_TOKEN` to be able to publish the crate(s).<br>
 This secret must be stored in a [repository environment](https://docs.github.com/en/actions/reference/environments) called `Deployment`.
