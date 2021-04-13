@@ -63,7 +63,7 @@ jobs:
           if-no-files-found: error
           retention-days: 1
       - name: Upload coverage report on Codecov
-        run: bash .github/workflows/scripts/upload_coverage_to_codecov.sh
+        run: bash .github/workflows/scripts/upload_coverage_on_codecov.sh
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       - name: Check coverage threshold
