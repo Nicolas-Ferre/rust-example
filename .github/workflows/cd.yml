@@ -13,8 +13,24 @@ env:
 
 jobs:
 
+  check-commit:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check author
+        if: ${{ !contains(env.AUTHORIZED_ACTORS, github.actor) }}
+        run: exit 1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check CHANGELOG.md file exists
+        run: '[ ! -f <file> ] && exit 1'
+      - name: Extract tag name
+        run: echo "TAG_NAME=$(grep -m 1 '## \[' CHANGELOG.md | cut -d [ -f2 | cut -d ] -f1)" >> $GITHUB_ENV
+      - name: Check tag name is not "Unreleased"
+        run: (! echo $TAG_NAME | grep -qi Unreleased) || exit $?
+
   test-ubuntu:
     runs-on: ubuntu-18.04
+    needs: check-commit
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -94,3 +110,30 @@ jobs:
           override: true
       - name: Publish
         run: bash .github/workflows/scripts/run_publication.sh
+
+  create-tag-release:
+    runs-on: ubuntu-18.04
+    needs: publish
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Extract tag name
+        run: echo "TAG_NAME=$(grep -m 1 '## \[' CHANGELOG.md | cut -d [ -f2 | cut -d ] -f1)" >> $GITHUB_ENV
+      - name: Extract changelog
+        run: sed -n '/## \[/,/## \[/p' CHANGELOG.md | sed '/## \[/d' | sed '1{/^$/d}' | sed '1{/^$/d}' | sed '${/^$/d}' | sed '${/^$/d}' > version_changelog.md
+      - name: Push tag
+        uses: mathieudutour/github-tag-action@v5.4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          create_annotated_tag: true
+          tag_prefix: v
+          custom_tag: ${{ env.TAG_NAME }}
+          release_branches: ''
+      - name: Create a GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.TAG_NAME }}
+          release_name: v${{ env.TAG_NAME }}
+          body_path: version_changelog.md
