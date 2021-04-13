@@ -9,16 +9,12 @@ env:
   CARGO_TERM_COLOR: always
   RUST_VERSION_STABLE: 1.51.0
   CRATE_PATHS: .
-  AUTHORIZED_ACTORS: '["Nicolas-Ferre"]'
 
 jobs:
 
   check-commit:
     runs-on: ubuntu-18.04
     steps:
-      - name: Check author
-        if: ${{ !contains(env.AUTHORIZED_ACTORS, github.actor) }}
-        run: exit 1
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check CHANGELOG.md file exists
@@ -80,9 +76,9 @@ jobs:
         run: cargo test
 
   check-publication:
+    environment: Deployment
     runs-on: ubuntu-18.04
     needs: test-macos
-    if: ${{ contains('["Nicolas-Ferre"]', github.actor) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -94,11 +90,13 @@ jobs:
           override: true
       - name: Check publication
         run: bash .github/workflows/scripts/check_publication.sh
+        env:
+          CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
   publish:
+    environment: Deployment
     runs-on: ubuntu-18.04
     needs: check-publication
-    if: ${{ contains(env.AUTHORIZED_ACTORS, github.actor) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -110,6 +108,8 @@ jobs:
           override: true
       - name: Publish
         run: bash .github/workflows/scripts/run_publication.sh
+        env:
+          CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
 
   create-tag-release:
     runs-on: ubuntu-18.04

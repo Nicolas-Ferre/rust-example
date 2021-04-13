@@ -48,7 +48,8 @@ The `CD` workflow is triggered by a push in the `main` branch and runs the follo
 - Make a publication dry run on [crates.io](https://crates.io)
 - Publish on [crates.io](https://crates.io)
 
-The `CD` workflow requires a secret named `CRATES_IO_TOKEN` to be able to publish the crate(s).
+The `CD` workflow requires a secret named `CRATES_IO_TOKEN` to be able to publish the crate(s).<br>
+This secret must be stored in a [repository environment](https://docs.github.com/en/actions/reference/environments) called `Deployment`.
 
 ### Settings
 
@@ -63,7 +64,6 @@ Settings of the `CI` workflow can be modified in the file `.github/workflows/ci.
 Settings of the `CD` workflow can be modified in the file `.github/workflows/cd.yml`, in the `env` section:
 - `RUST_VERSION_STABLE`: version of the stable Rust compiler to use
 - `CRATE_PATHS`: package names separated by `;` in publication order if the repository is a Cargo workspace, else `.`
-- `AUTHORIZED_ACTORS`: list GitHub users that are authorized to perform a publication
 
 ### Export
 
