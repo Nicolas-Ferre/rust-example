@@ -48,6 +48,11 @@ The `CD` workflow is triggered by a push in the `main` branch and runs the follo
 - Make a publication dry run on [crates.io](https://crates.io)
 - Publish on [crates.io](https://crates.io)
 
+### Secrets
+
+The `CI` workflow can send coverage to [Codecov](https://about.codecov.io/) if the secret `CODECOV_TOKEN` is set.<br>
+This secret must be stored in a [repository environment](https://docs.github.com/en/actions/reference/environments) called `Coverage`.
+
 The `CD` workflow requires a secret named `CRATES_IO_TOKEN` to be able to publish the crate(s).<br>
 This secret must be stored in a [repository environment](https://docs.github.com/en/actions/reference/environments) called `Deployment`.
 
