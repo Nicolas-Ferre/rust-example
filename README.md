@@ -72,7 +72,7 @@ You can use the workflows for your own project by copying the folder `.github/wo
 ### Run locally
 
 [act](https://github.com/nektos/act) can be used to run the workflows on your own machine.<br>
-Once installed, run `act -P ubuntu-18.04=nektos/act-environments-ubuntu:18.04` in the repository folder to run all the jobs.
+Once installed, run `act -P ubuntu-18.04=nektos/act-environments-ubuntu:18.04` in the repository folder to run all supported jobs.
 
 ### Workspaces
 
