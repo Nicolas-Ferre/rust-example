@@ -18,7 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check CHANGELOG.md file exists
-        run: '[ ! -f CHANGELOG.md ] && exit 1'
+        run: '[ -f CHANGELOG.md ]'
       - name: Extract tag name
         run: echo "TAG_NAME=$(grep -m 1 '## \[' CHANGELOG.md | cut -d [ -f2 | cut -d ] -f1)" >> $GITHUB_ENV
       - name: Check tag name is not "Unreleased"
