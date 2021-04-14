@@ -1,0 +1,139 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_VERSION_STABLE: 1.51.0
+  CRATE_PATHS: .
+
+jobs:
+
+  check-changelog:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check CHANGELOG.md file exists
+        run: '[ ! -f <file> ] && exit 1'
+      - name: Extract tag name
+        run: echo "TAG_NAME=$(grep -m 1 '## \[' CHANGELOG.md | cut -d [ -f2 | cut -d ] -f1)" >> $GITHUB_ENV
+      - name: Check tag name is not "Unreleased"
+        run: (! echo $TAG_NAME | grep -qi Unreleased) || exit $?
+
+  test-ubuntu:
+    runs-on: ubuntu-18.04
+    needs: check-changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION_STABLE }}
+          profile: minimal
+          override: true
+      - name: Build
+        run: cargo build --all-targets
+      - name: Test
+        run: cargo test
+
+  test-windows:
+    runs-on: windows-2019
+    needs: test-ubuntu
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION_STABLE }}
+          profile: minimal
+          override: true
+      - name: Build
+        run: cargo build --all-targets
+      - name: Test
+        run: cargo test
+
+  test-macos:
+    runs-on: macos-10.15
+    needs: test-windows
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION_STABLE }}
+          profile: minimal
+          override: true
+      - name: Build
+        run: cargo build --all-targets
+      - name: Test
+        run: cargo test
+
+  check-publication:
+    environment: Deployment
+    runs-on: ubuntu-18.04
+    needs: test-macos
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION_STABLE }}
+          profile: minimal
+          override: true
+      - name: Check publication
+        run: bash .github/workflows/scripts/check_publication.sh
+        env:
+          CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+
+  publish:
+    environment: Deployment
+    runs-on: ubuntu-18.04
+    needs: check-publication
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION_STABLE }}
+          profile: minimal
+          override: true
+      - name: Publish
+        run: bash .github/workflows/scripts/run_publication.sh
+        env:
+          CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+
+  create-tag-release:
+    runs-on: ubuntu-18.04
+    needs: publish
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Extract tag name
+        run: echo "TAG_NAME=$(grep -m 1 '## \[' CHANGELOG.md | cut -d [ -f2 | cut -d ] -f1)" >> $GITHUB_ENV
+      - name: Extract changelog
+        run: sed -n '/## \[/,/## \[/p' CHANGELOG.md | sed '/## \[/d' | sed '1{/^$/d}' | sed '1{/^$/d}' | sed '${/^$/d}' | sed '${/^$/d}' > version_changelog.md
+      - name: Push tag
+        uses: mathieudutour/github-tag-action@v5.4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          create_annotated_tag: true
+          tag_prefix: v
+          custom_tag: ${{ env.TAG_NAME }}
+          release_branches: ''
+      - name: Create a GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.TAG_NAME }}
+          release_name: v${{ env.TAG_NAME }}
+          body_path: version_changelog.md

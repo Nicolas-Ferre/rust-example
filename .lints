@@ -1,0 +1,40 @@
+-W anonymous_parameters
+-W bare_trait_objects
+-W elided_lifetimes_in_paths
+-W missing_docs
+-W trivial_numeric_casts
+-W unreachable_pub
+-W unsafe_code
+-W unused_extern_crates
+-W unused_import_braces
+-W unused_qualifications
+-W clippy::all
+-W clippy::pedantic
+-W clippy::nursery
+-W clippy::cargo
+-W clippy::dbg_macro
+-W clippy::decimal_literal_representation
+-W clippy::filetype_is_file
+-W clippy::float_cmp_const
+-W clippy::get_unwrap
+-W clippy::integer_division
+-W clippy::lossy_float_literal
+-W clippy::mem_forget
+-W clippy::multiple_inherent_impl
+-W clippy::print_stdout
+-W clippy::rest_pat_in_fully_bound_structs
+-W clippy::todo
+-W clippy::unimplemented
+-W clippy::unneeded_field_pattern
+-W clippy::unwrap_used
+-W clippy::use_debug
+-W clippy::verbose_file_reads
+-W clippy::wildcard_enum_match_arm
+-W clippy::wrong_pub_self_convention
+-A clippy::filter_map # generally less clear
+-A clippy::missing_const_for_fn # not necessary each time it's possible
+-A clippy::module_name_repetitions # structure names are rarely used with module names
+-A clippy::multiple_crate_versions # cannot be easily fixed
+-A clippy::must_use_candidate # not accurate
+-A clippy::redundant_pub_crate # not working well for now
+-A clippy::wildcard_imports # more convenient for tests
