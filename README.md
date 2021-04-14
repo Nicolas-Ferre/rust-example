@@ -4,7 +4,7 @@
 [![Docs.rs](https://img.shields.io/docsrs/rust_lib_example)](https://docs.rs/crate/rust_lib_example)
 [![License](https://img.shields.io/crates/l/rust_lib_example)](https://github.com/Nicolas-Ferre/rust-example)
 [![CI](https://github.com/Nicolas-Ferre/rust-example/actions/workflows/ci.yml/badge.svg)](https://github.com/Nicolas-Ferre/rust-example/actions/workflows/ci.yml)
-[![Coverage with grcov](https://img.shields.io/badge/coverage-grcov-blue.svg)](https://github.com/Nicolas-Ferre/rust-example/actions/workflows/ci.yml)
+[![Coverage with grcov](https://img.shields.io/codecov/c/gh/Nicolas-Ferre/rust-example)](https://app.codecov.io/gh/Nicolas-Ferre/rust-example)
 [![Mutation tested with mutagen](https://img.shields.io/badge/mutation%20tested-mutagen-blue.svg)](https://github.com/Nicolas-Ferre/rust-example/actions/workflows/ci.yml)
 [![Lines of code](https://tokei.rs/b1/github/Nicolas-Ferre/rust-example?category=code)](https://github.com/Nicolas-Ferre/rust-example)
 
