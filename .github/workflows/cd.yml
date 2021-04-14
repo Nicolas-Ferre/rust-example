@@ -12,7 +12,7 @@ env:
 
 jobs:
 
-  check-commit:
+  check-changelog:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -26,7 +26,7 @@ jobs:
 
   test-ubuntu:
     runs-on: ubuntu-18.04
-    needs: check-commit
+    needs: check-changelog
     steps:
       - name: Checkout
         uses: actions/checkout@v2

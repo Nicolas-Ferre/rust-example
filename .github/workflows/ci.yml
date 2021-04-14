@@ -41,6 +41,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -54,13 +56,15 @@ jobs:
         run: bash .github/workflows/scripts/install_mutagen.sh
       - name: Run coverage
         run: bash .github/workflows/scripts/run_coverage.sh
-      - name: Upload coverage report
+      - name: Upload coverage report on GitHub
         uses: actions/upload-artifact@v2
         with:
           name: coverage
           path: coverage
           if-no-files-found: error
           retention-days: 1
+      - name: Upload coverage report on Codecov
+        run: bash .github/workflows/scripts/upload_coverage_on_codecov.sh
       - name: Check coverage threshold
         run: bash .github/workflows/scripts/check_coverage.sh
       - name: Run mutation tests
