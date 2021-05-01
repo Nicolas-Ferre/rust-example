@@ -111,7 +111,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Install other dependencies
         run: sudo apt-get install moreutils dos2unix
-        uses: EmbarkStudios/cargo-deny-action@v1
       - name: Check encoding
         run: isutf8 **/*
       - name: Check line endings
