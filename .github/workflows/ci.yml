@@ -35,7 +35,7 @@ jobs:
       - name: Test
         run: cargo test
 
-  check-coverage-mutations:
+  check-coverage:
     runs-on: ubuntu-18.04
     needs: test
     steps:
@@ -52,8 +52,6 @@ jobs:
           override: true
       - name: Install grcov
         run: cargo install grcov --debug
-      - name: Install mutagen
-        run: bash .github/workflows/scripts/install_mutagen.sh
       - name: Run coverage
         run: bash .github/workflows/scripts/run_coverage.sh
       - name: Upload coverage report on GitHub
@@ -67,12 +65,27 @@ jobs:
         run: bash .github/workflows/scripts/upload_coverage_on_codecov.sh
       - name: Check coverage threshold
         run: bash .github/workflows/scripts/check_coverage.sh
+
+  check-mutations:
+    runs-on: ubuntu-18.04
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_VERSION_NIGHTLY }}
+          profile: minimal
+          override: true
+      - name: Install mutagen
+        run: bash .github/workflows/scripts/install_mutagen.sh
       - name: Run mutation tests
         run: bash .github/workflows/scripts/check_mutations.sh
 
-  lint:
+  lint-rust:
     runs-on: ubuntu-18.04
-    needs: check-coverage-mutations
+    needs: test
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -83,13 +96,21 @@ jobs:
           profile: minimal
           components: rustfmt, clippy
           override: true
-      - name: Install other dependencies
-        run: sudo apt-get install moreutils dos2unix
       - name: Run clippy
         run: cargo clippy --all-targets -- -D warnings $(cat .lints | cut -f1 -d"#" | tr '\n' ' ')
       - name: Run rustfmt
         run: cargo fmt -- --check
       - name: Run cargo-deny
+        uses: EmbarkStudios/cargo-deny-action@v1
+
+  lint-generic:
+    runs-on: ubuntu-18.04
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install other dependencies
+        run: sudo apt-get install moreutils dos2unix
         uses: EmbarkStudios/cargo-deny-action@v1
       - name: Check encoding
         run: isutf8 **/*

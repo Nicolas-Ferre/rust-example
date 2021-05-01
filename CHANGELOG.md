@@ -13,6 +13,7 @@
 - Work in progress branch (`main` instead of `develop`)
 - Events that trigger CI and CD pipelines
 - Version detection in CD pipeline (look at `Cargo.toml` files instead of `CHANGELOG.md`)
+- Parallelization of CI and CD pipelines
 
 ### Deleted
 
