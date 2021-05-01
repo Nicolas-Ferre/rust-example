@@ -21,7 +21,7 @@ Most of the components can be reusable in your own projects:
 
 ### Jobs
 
-The `CI` workflow is triggered for any commit or pull request on the `develop` branch and runs the following jobs:
+The `CI` workflow is triggered for any commit or pull request on the `main` branch and runs the following jobs:
 - Test the crate
     - Build the project for all targets and with default features to ensure everything compiles
     - Run unit, integration and doc tests with default features
@@ -42,19 +42,26 @@ The `CI` workflow is triggered for any commit or pull request on the `develop` b
 
 This workflow is only run on Ubuntu virtual environment.
 
-The `CD` workflow is triggered by a push in the `main` branch and runs the following jobs:
-- Check release name from `CHANGELOG.md` file
+The `CD` workflow is triggered manually and runs the following jobs:
+- Check version to release in `Cargo.toml` files
 - Test on Ubuntu
 - Test on Windows
 - Test on MacOS
 - Make a publication dry run on [crates.io](https://crates.io)
 - Publish on [crates.io](https://crates.io)
-- Create tag and Github release using first entry in `CHANGELOG.md` file
+- Create the release and prepare the next one in the repository
+    - Update the latest version and its release date in the `CHANGELOG.md` file and push the changes
+    - Tag the created commit with the name of the released version
+    - Create a GitHub release from the created tag and the content of the `CHANGELOG.md` file
+    - Create a new section for the next release in the `CHANGELOG.md` file and push the changes
 
 ### Secrets
 
-The `CD` workflow requires a secret named `CRATES_IO_TOKEN` to be able to publish the crate(s).<br>
-This secret must be stored in a [repository environment](https://docs.github.com/en/actions/reference/environments) called `Deployment`.
+The `CD` workflow requires the following secrets:
+- `CRATES_IO_TOKEN`: token to publish the crate(s) on [crates.io](https://crates.io)
+- `GIT_TOKEN`: GitHub personal access token to allow pushing changes as administrator (if the `main` branch is protected, "Include administrators" must be unchecked in settings)
+
+These secrets must be stored in a [repository environment](https://docs.github.com/en/actions/reference/environments) called `Deployment`.
 
 ### Settings
 
