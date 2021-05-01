@@ -59,7 +59,7 @@ The `CD` workflow is triggered manually and runs the following jobs:
 
 The `CD` workflow requires the following secrets:
 - `CRATES_IO_TOKEN`: token to publish the crate(s) on [crates.io](https://crates.io)
-- `GIT_TOKEN`: GitHub personal access token to allow pushing changes as administrator (required when the `main` branch is protected but "Include administrators" is unchecked in settings)
+- `GIT_TOKEN`: GitHub personal access token to allow pushing changes as administrator (if the `main` branch is protected, "Include administrators" must be unchecked in settings)
 
 These secrets must be stored in a [repository environment](https://docs.github.com/en/actions/reference/environments) called `Deployment`.
 
