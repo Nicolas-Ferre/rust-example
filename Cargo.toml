@@ -1,6 +1,6 @@
 [package]
 name = "rust_lib_example"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Nicolas Ferré <nicolas.ferre.public@gmail.com>"]
 edition = "2018"
 description = "Rust project example"

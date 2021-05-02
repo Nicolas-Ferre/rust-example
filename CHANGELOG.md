@@ -1,5 +1,7 @@
 # Changelog
 
+## [Unreleased] - yyyy-mm-dd
+
 ## [0.2.0] - 2021-05-02
 
 ### Added
