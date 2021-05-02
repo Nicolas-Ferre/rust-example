@@ -88,6 +88,8 @@ jobs:
           toolchain: ${{ env.RUST_VERSION_STABLE }}
           profile: minimal
           override: true
+      - name: Apply version and date in CHANGELOG.md file
+        run: sed -i "s/^\#\# \[Unreleased\] - yyyy-mm-dd$/\#\# [${{needs.check-version.outputs.version}}] - $(date +'%Y-%m-%d')/g" CHANGELOG.md
       - name: Check publication
         run: bash .github/workflows/scripts/check_publication.sh
         env:
@@ -97,6 +99,7 @@ jobs:
     environment: Deployment
     runs-on: ubuntu-18.04
     needs:
+      - check-version
       - test-ubuntu
       - test-windows
       - test-macos
@@ -110,6 +113,8 @@ jobs:
           toolchain: ${{ env.RUST_VERSION_STABLE }}
           profile: minimal
           override: true
+      - name: Apply version and date in CHANGELOG.md file
+        run: sed -i "s/^\#\# \[Unreleased\] - yyyy-mm-dd$/\#\# [${{needs.check-version.outputs.version}}] - $(date +'%Y-%m-%d')/g" CHANGELOG.md
       - name: Publish
         run: bash .github/workflows/scripts/run_publication.sh
         env:
