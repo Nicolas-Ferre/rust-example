@@ -77,10 +77,6 @@ Settings of the `CD` workflow can be modified in the file `.github/workflows/cd.
 - `RUST_VERSION_STABLE`: version of the stable Rust compiler to use
 - `CRATE_PATHS`: package names separated by `;` in publication order if the repository is a Cargo workspace, else `.`
 
-### Export
-
-You can use the workflows for your own project by copying the folder `.github/workflows`.
-
 ### Run locally
 
 [act](https://github.com/nektos/act) can be used to run the workflows on your own machine.<br>
@@ -89,6 +85,19 @@ Once installed, run `act -P ubuntu-18.04=nektos/act-environments-ubuntu:18.04` i
 ### Workspaces
 
 This repository contains a single crate, but the workflows should also work with a Cargo workspace.
+
+## Adaptations for another project
+
+This project example is made to be reused.
+If you are interested in using this template, you can copy the files in your own project and:
+- adapt the settings of the CI workflow in the file `.github/workflows/ci.yml`, in the `env` section
+- adapt the settings of the CD workflow in the file `.github/workflows/cd.yml`, in the `env` section
+- edit the `.lints`, `deny.toml`, `rustfmt.toml`, `Cargo.toml` and `README.md` files as wanted
+- edit the issue templates in `.github/ISSUE_TEMPLATE` as wanted
+- reset the `CHANGELOG.md` file (make sure there is at least a section `## [Unreleased] - yyyy-mm-dd`)
+- change the copyright notices in the `LICENSE-MIT` and `LICENSE-APACHE` files if you keep these licenses
+- in the repository settings, create a GitHub environment named `Deployment` with the `CRATES_IO_TOKEN` and `GIT_TOKEN` secrets
+- if the `main` branch is configured as protected, make sure `Include administrators` is unchecked in the configuration
 
 ## License
 
