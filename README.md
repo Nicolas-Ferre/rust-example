@@ -93,6 +93,7 @@ If you are interested in using this template, you can copy the files in your own
 - adapt the settings of the CI workflow in the file `.github/workflows/ci.yml`, in the `env` section
 - adapt the settings of the CD workflow in the file `.github/workflows/cd.yml`, in the `env` section
 - edit the `.lints`, `deny.toml`, `rustfmt.toml`, `Cargo.toml` and `README.md` files as wanted
+- edit the issue templates in `.github/ISSUE_TEMPLATE` as wanted
 - reset the `CHANGELOG.md` file (make sure there is at least a section `## [Unreleased] - yyyy-mm-dd`)
 - change the copyright notices in the `LICENSE-MIT` and `LICENSE-APACHE` files if you keep these licenses
 - in the repository settings, create a GitHub environment named `Deployment` with the `CRATES_IO_TOKEN` and `GIT_TOKEN` secrets

@@ -11,7 +11,7 @@ assignees: ''
 A description of what the bug is.
 
 **Example**
-A [minimal reproductible code example](https://stackoverflow.com/help/minimal-reproducible-example) where the bug happens.
+A [minimal reproducible code example](https://stackoverflow.com/help/minimal-reproducible-example) where the bug happens.
 
 **Expected behavior**
 A description of what you expected to happen.
